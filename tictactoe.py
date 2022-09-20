@@ -1,5 +1,3 @@
-from re import S
-
 def construct_empty_board():
     return [[0,0,0],[0,0,0],[0,0,0]]
 
@@ -21,6 +19,24 @@ def print_board(board):
 def print_round_number(round, player):
     print(f"ROUND {round}, PLAYER {player}'S TURN")
     return None
+
+def validate_move(move):
+    if move in [0,1,2]:
+        return True
+    else:
+        return False
+
+def read_move(row_or_column, player):
+    if row_or_column == 'row':
+        move = int(input(f'Write in a row number to put down your {player}:'))-1
+    elif row_or_column == 'column':
+        move = int(input(f'Write in a column number to put down your {player}:'))-1
+    if validate_move(move):
+        return move
+    else:
+        print("The number you entered is invalid (it must be 1, 2, or 3).")
+        return read_move(row_or_column, player)
+    
     
 def run_turn(board, player, round):
     print_round_number(round, player)
@@ -30,16 +46,14 @@ def run_turn(board, player, round):
     elif player == 'O':
         value = 2
     
-    move_row = int(input(f'Write in a row number to put down your {player}:'))-1
-    move_column = int(input(f'Write in a column number to put down your {player}:'))-1
+    move_row = read_move('row', player)
+    move_column = read_move('column', player)
     
     #Update board
     board[move_row][move_column] = value
 
     
     return board
-
-
 
 def check_state(board):
     state = None
